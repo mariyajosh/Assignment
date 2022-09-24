@@ -1,8 +1,11 @@
 package com.example.DriveAssignment.Model;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import java.time.LocalDate;
+import java.util.Date;
 
 @Entity
 public class Product {
@@ -17,12 +20,13 @@ public class Product {
     int free;
     double mrp;
     double rate;
-    String date;
+    @Column(name = "expire_date")
+    LocalDate date;
     String company;
     String supplier;
     public Product(){}
 
-    public Product(int id, String code, String name, String batch, int stock, int deal, int free, double mrp, double rate, String date, String company, String supplier) {
+    public Product(int id, String code, String name, String batch, int stock, int deal, int free, double mrp, double rate, LocalDate date, String company, String supplier) {
         this.id = id;
         this.code = code;
         this.name = name;
@@ -109,11 +113,11 @@ public class Product {
         this.rate = rate;
     }
 
-    public String getDate() {
+    public LocalDate getDate() {
         return date;
     }
 
-    public void setDate(String date) {
+    public void setDate(LocalDate date) {
         this.date = date;
     }
 

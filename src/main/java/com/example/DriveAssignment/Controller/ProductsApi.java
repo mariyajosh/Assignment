@@ -30,10 +30,11 @@ public class ProductsApi {
     ProductResponse getAllProducts(
             @RequestParam(required = false) String suppliers,
             @RequestParam(required = false)  String name,
+            @RequestParam(required = false)  Boolean expired,
             @RequestParam(required = false, defaultValue = "0")Integer page,
             @RequestParam(required = false, defaultValue = "10")Integer size
     ){
         PageRequest pageRequest = PageRequest.of(page ,size);
-       return productsService.getAllProducts(suppliers, name, pageRequest);
+       return productsService.getAllProducts(suppliers, name, expired, pageRequest);
     }
 }
