@@ -19,7 +19,7 @@ public class Product {
     double rate;
     String date;
     String company;
-    String Supplier;
+    String supplier;
     public Product(){}
 
     public Product(int id, String code, String name, String batch, int stock, int deal, int free, double mrp, double rate, String date, String company, String supplier) {
@@ -34,7 +34,7 @@ public class Product {
         this.rate = rate;
         this.date = date;
         this.company = company;
-        Supplier = supplier;
+        this.supplier = supplier;
     }
 
     public int getId() {
@@ -126,11 +126,11 @@ public class Product {
     }
 
     public String getSupplier() {
-        return Supplier;
+        return supplier;
     }
 
     public void setSupplier(String supplier) {
-        Supplier = supplier;
+        this.supplier = supplier;
     }
 
     @Override
@@ -147,7 +147,7 @@ public class Product {
                 ", rate=" + rate +
                 ", date='" + date + '\'' +
                 ", company='" + company + '\'' +
-                ", Supplier='" + Supplier + '\'' +
+                ", supplier='" + supplier + '\'' +
                 '}';
     }
 }

@@ -1,14 +1,16 @@
 package com.example.DriveAssignment.Controller;
 
-import com.example.DriveAssignment.Model.Product;
+
+import com.example.DriveAssignment.Model.ProductResponse;
 import com.example.DriveAssignment.Service.ProductsService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
-import java.util.List;
+
 
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
 import static org.springframework.web.bind.annotation.RequestMethod.POST;
@@ -25,7 +27,13 @@ public class ProductsApi {
     }
 
     @RequestMapping(path = "/products" , method = GET)
-    List<Product> getAllProducts(){
-       return productsService.getAllProducts();
+    ProductResponse getAllProducts(
+            @RequestParam(required = false) String suppliers,
+            @RequestParam(required = false)  String name,
+            @RequestParam(required = false, defaultValue = "0")Integer page,
+            @RequestParam(required = false, defaultValue = "10")Integer size
+    ){
+        PageRequest pageRequest = PageRequest.of(page ,size);
+       return productsService.getAllProducts(suppliers, name, pageRequest);
     }
 }

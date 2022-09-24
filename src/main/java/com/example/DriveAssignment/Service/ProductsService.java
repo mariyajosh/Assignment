@@ -1,8 +1,11 @@
 package com.example.DriveAssignment.Service;
 
 import com.example.DriveAssignment.Model.Product;
+import com.example.DriveAssignment.Model.ProductResponse;
 import com.example.DriveAssignment.Repository.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import java.io.BufferedReader;
@@ -16,7 +19,7 @@ import java.util.List;
 public class ProductsService {
 
     @Autowired
-    ProductRepository productRepository;
+    private ProductRepository productRepository;
 
     public void addAllProducts(MultipartFile document){
              try {
@@ -32,22 +35,19 @@ public class ProductsService {
               System.out.println(e.getLocalizedMessage());
         }
     }
-    public List<Product> getAllProducts(){
-        List<Product> products = new ArrayList();
-      productRepository.findAll().forEach(products::add);
-        return products;
+    public ProductResponse getAllProducts(String suppliers, String name, PageRequest pageRequest){
+     Page<Product> products = productRepository.getSuppliers(suppliers, name, pageRequest);
+     return new ProductResponse(products.getContent(), (int)products.getTotalElements());
     }
 
     private List<Product> mapToProducts(BufferedReader bufferedReader) throws IOException {
         boolean skipLine = true;
-        int count = 1;
         String line;
         List<Product> products = new ArrayList<>();
         while ((line = bufferedReader.readLine()) != null) {
             if(!skipLine) {
                 String[] r = line.split(",",11);
                 Product product = new Product();
-                product.setId(count);
                 product.setCode(r[0]);
                 product.setName(r[1]);
                 product.setBatch(r[2]);
@@ -61,7 +61,6 @@ public class ProductsService {
                 product.setSupplier(r[10]);
                 products.add(product);
             }
-            count++;
             skipLine = false;
         }
         return products;
