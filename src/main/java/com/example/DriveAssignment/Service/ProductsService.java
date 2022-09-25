@@ -16,6 +16,7 @@ import java.io.InputStreamReader;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.StreamSupport;
 
 @Service
 public class ProductsService {
@@ -23,24 +24,24 @@ public class ProductsService {
     @Autowired
     private ProductRepository productRepository;
 
-    public void addAllProducts(MultipartFile document){
-             try {
-                InputStream inputStream = document.getInputStream();
-                 BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
-                 List<Product> products = mapToProducts(bufferedReader);
-                 productRepository.saveAll(products);
-
-
-            } catch (ParseException e) {
+    public long addProducts(MultipartFile document){
+        try {
+            InputStream inputStream = document.getInputStream();
+            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
+            List<Product> products = mapToProducts(bufferedReader);
+            Iterable<Product> result =  productRepository.saveAll(products);
+            return StreamSupport.stream(result.spliterator(), false).count();
+        } catch (ParseException e) {
                  System.out.println(e.getLocalizedMessage());
-             } catch (IOException e) {
+        } catch (IOException e) {
                  System.out.println(e.getLocalizedMessage());
-            } catch(Exception e){
+        } catch(Exception e){
               System.out.println(e.getLocalizedMessage());
         }
+        return 0;
     }
-    public ProductResponse getAllProducts(String suppliers, String name, Boolean expired, PageRequest pageRequest){
-     Page<Product> products = productRepository.getSuppliers(suppliers, name, expired, pageRequest);
+    public ProductResponse getProducts(String suppliers, String name, Boolean expired, PageRequest pageRequest){
+     Page<Product> products = productRepository.getProducts(suppliers, name, expired, pageRequest);
      return new ProductResponse(products.getContent(), (int)products.getTotalElements());
     }
 
@@ -49,21 +50,20 @@ public class ProductsService {
         String line;
         List<Product> products = new ArrayList<>();
         while ((line = bufferedReader.readLine()) != null) {
-            System.out.println(line);
             if(!skipLine) {
-                String[] r = line.split(",",11);
+                String[] productDetails = line.split(",",11);
                 Product product = new Product();
-                product.setCode(r[0]);
-                product.setName(r[1]);
-                product.setBatch(r[2]);
-                product.setStock(Integer.parseInt(r[3]));
-                product.setDeal(Integer.parseInt(r[4]));
-                product.setFree(Integer.parseInt(r[5]));
-                product.setMrp(Double.parseDouble(r[6]));
-                product.setRate(Double.parseDouble(r[7]));
-                product.setDate(Utility.formatStringToDate(r[8]));
-                product.setCompany(r[9]);
-                product.setSupplier(r[10]);
+                product.setCode(productDetails[0]);
+                product.setName(productDetails[1]);
+                product.setBatch(productDetails[2]);
+                product.setStock(Integer.parseInt(productDetails[3]));
+                product.setDeal(Integer.parseInt(productDetails[4]));
+                product.setFree(Integer.parseInt(productDetails[5]));
+                product.setMrp(Double.parseDouble(productDetails[6]));
+                product.setRate(Double.parseDouble(productDetails[7]));
+                product.setDate(Utility.formatStringToDate(productDetails[8]));
+                product.setCompany(productDetails[9]);
+                product.setSupplier(productDetails[10]);
                 products.add(product);
             }
             skipLine = false;

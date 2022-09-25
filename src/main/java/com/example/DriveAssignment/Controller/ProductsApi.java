@@ -22,12 +22,13 @@ public class ProductsApi {
 
     @RequestMapping(path = "/products", method = POST, consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
     String addProducts(@RequestParam("file") MultipartFile document){
-        productsService.addAllProducts(document);
-        return "Products added successfully";
+        long numberOfProductsAdded = productsService.addProducts(document);
+        return numberOfProductsAdded+" "+"Products added Successfully";
+
     }
 
     @RequestMapping(path = "/products" , method = GET)
-    ProductResponse getAllProducts(
+    ProductResponse getProducts(
             @RequestParam(required = false) String suppliers,
             @RequestParam(required = false)  String name,
             @RequestParam(required = false)  Boolean expired,
@@ -35,6 +36,6 @@ public class ProductsApi {
             @RequestParam(required = false, defaultValue = "10")Integer size
     ){
         PageRequest pageRequest = PageRequest.of(page ,size);
-       return productsService.getAllProducts(suppliers, name, expired, pageRequest);
+       return productsService.getProducts(suppliers, name, expired, pageRequest);
     }
 }

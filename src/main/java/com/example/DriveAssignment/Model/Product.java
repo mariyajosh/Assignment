@@ -11,19 +11,19 @@ import java.util.Date;
 public class Product {
     @Id
     @GeneratedValue
-    int id;
-    String code;
-    String name;
-    String batch;
-    int stock;
-    int deal;
-    int free;
-    double mrp;
-    double rate;
+    private int id;
+    private String code;
+    private String name;
+    private String batch;
+    private int stock;
+    private int deal;
+    private int free;
+    private double mrp;
+    private double rate;
     @Column(name = "expire_date")
-    LocalDate date;
-    String company;
-    String supplier;
+    private LocalDate date;
+    private String company;
+    private String supplier;
     public Product(){}
 
     public Product(int id, String code, String name, String batch, int stock, int deal, int free, double mrp, double rate, LocalDate date, String company, String supplier) {

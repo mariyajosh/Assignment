@@ -34,24 +34,24 @@ public class ProductsServiceTest {
 
         productList.add(product);
         Mockito.when(productRepository.saveAll(productList)).thenReturn(productList);
-        productsService.addAllProducts(convertCsvToMultipartFile());
+        productsService.addProducts(convertCsvToMultipartFile());
         Mockito.verify(productRepository, Mockito.times(1)).saveAll(productList);
     }
 
     @Test
     public void ShouldCallRepositoryMethodToGetDataWithParams(){
         Page<Product> page = new PageImpl<>(productList);
-        Mockito.when(productRepository.getSuppliers("Atlassian", "software", true, null)).thenReturn(page);
-        productsService.getAllProducts("Atlassian", "software", true, null);
-        Mockito.verify(productRepository, Mockito.times(1)).getSuppliers("Atlassian", "software", true, null);
+        Mockito.when(productRepository.getProducts("Atlassian", "software", true, null)).thenReturn(page);
+        productsService.getProducts("Atlassian", "software", true, null);
+        Mockito.verify(productRepository, Mockito.times(1)).getProducts("Atlassian", "software", true, null);
     }
 
     @Test
     public void ShouldCallRepositoryMethodToGetDataWithEmptyParams(){
         Page<Product> page = new PageImpl<>(productList);
-        Mockito.when(productRepository.getSuppliers(null, null, null, null)).thenReturn(page);
-        productsService.getAllProducts(null, null, null, null);
-        Mockito.verify(productRepository, Mockito.times(1)).getSuppliers(null, null, null, null);
+        Mockito.when(productRepository.getProducts(null, null, null, null)).thenReturn(page);
+        productsService.getProducts(null, null, null, null);
+        Mockito.verify(productRepository, Mockito.times(1)).getProducts(null, null, null, null);
     }
 
     private MultipartFile convertCsvToMultipartFile() {
