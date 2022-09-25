@@ -4,6 +4,8 @@ import com.example.assignment.model.Product;
 import com.example.assignment.model.ProductResponse;
 import com.example.assignment.repository.ProductRepository;
 import com.example.assignment.util.Utility;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -24,28 +26,33 @@ public class ProductsService {
     @Autowired
     private ProductRepository productRepository;
 
+    private Logger log = LoggerFactory.getLogger(this.getClass());
+
     public long addProducts(MultipartFile document){
         try {
+            log.info("reading file data through streams");
             InputStream inputStream = document.getInputStream();
             BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
             List<Product> products = mapToProducts(bufferedReader);
             Iterable<Product> result =  productRepository.saveAll(products);
             return StreamSupport.stream(result.spliterator(), false).count();
         } catch (ParseException e) {
-                 System.out.println(e.getLocalizedMessage());
+            log.error(e.getLocalizedMessage());
         } catch (IOException e) {
-                 System.out.println(e.getLocalizedMessage());
+            log.error(e.getLocalizedMessage());
         } catch(Exception e){
-              System.out.println(e.getLocalizedMessage());
+            log.error(e.getLocalizedMessage());
         }
         return 0;
     }
     public ProductResponse getProducts(String supplier, String productName, Boolean expired, PageRequest pageRequest){
+        log.info("Invoking repository method");
      Page<Product> products = productRepository.getProducts(supplier, productName, expired, pageRequest);
      return new ProductResponse(products.getContent(), (int)products.getTotalElements());
     }
 
     private List<Product> mapToProducts(BufferedReader bufferedReader) throws IOException, ParseException {
+        log.info("Mapping the data to product objects");
         boolean skipLine = true;
         String line;
         List<Product> products = new ArrayList<>();

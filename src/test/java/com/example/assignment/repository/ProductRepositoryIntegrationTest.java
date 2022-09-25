@@ -13,6 +13,7 @@ import java.util.List;
 @SpringBootTest()
 public class ProductRepositoryIntegrationTest {
     @Autowired
+
     private ProductRepository productRepository;
     Product product = new Product(1, "RENT", "RENT", "", 24, 0, 0, 0.0, 0.0, null, "RENT", "SARADA PHARMACY");
     List<Product> productList = new ArrayList<>();
