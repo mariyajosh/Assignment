@@ -1,9 +1,8 @@
-package com.example.DriveAssignment.service;
+package com.example.assignment.service;
 
 
-import com.example.DriveAssignment.Model.Product;
-import com.example.DriveAssignment.Repository.ProductRepository;
-import com.example.DriveAssignment.Service.ProductsService;
+import com.example.assignment.model.Product;
+import com.example.assignment.repository.ProductRepository;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;

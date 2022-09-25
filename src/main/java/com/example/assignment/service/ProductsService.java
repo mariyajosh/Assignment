@@ -1,9 +1,9 @@
-package com.example.DriveAssignment.Service;
+package com.example.assignment.service;
 
-import com.example.DriveAssignment.Model.Product;
-import com.example.DriveAssignment.Model.ProductResponse;
-import com.example.DriveAssignment.Repository.ProductRepository;
-import com.example.DriveAssignment.util.Utility;
+import com.example.assignment.model.Product;
+import com.example.assignment.model.ProductResponse;
+import com.example.assignment.repository.ProductRepository;
+import com.example.assignment.util.Utility;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -40,8 +40,8 @@ public class ProductsService {
         }
         return 0;
     }
-    public ProductResponse getProducts(String suppliers, String name, Boolean expired, PageRequest pageRequest){
-     Page<Product> products = productRepository.getProducts(suppliers, name, expired, pageRequest);
+    public ProductResponse getProducts(String supplier, String productName, Boolean expired, PageRequest pageRequest){
+     Page<Product> products = productRepository.getProducts(supplier, productName, expired, pageRequest);
      return new ProductResponse(products.getContent(), (int)products.getTotalElements());
     }
 

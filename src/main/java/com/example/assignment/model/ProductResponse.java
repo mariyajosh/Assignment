@@ -1,4 +1,4 @@
-package com.example.DriveAssignment.Model;
+package com.example.assignment.model;
 
 import java.util.List;
 

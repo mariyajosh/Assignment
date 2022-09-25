@@ -1,6 +1,6 @@
-package com.example.DriveAssignment.Repository;
+package com.example.assignment.repository;
 
-import com.example.DriveAssignment.Model.Product;
+import com.example.assignment.model.Product;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
