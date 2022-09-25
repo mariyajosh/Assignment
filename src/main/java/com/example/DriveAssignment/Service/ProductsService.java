@@ -30,6 +30,7 @@ public class ProductsService {
                  List<Product> products = mapToProducts(bufferedReader);
                  productRepository.saveAll(products);
 
+
             } catch (ParseException e) {
                  System.out.println(e.getLocalizedMessage());
              } catch (IOException e) {
@@ -48,6 +49,7 @@ public class ProductsService {
         String line;
         List<Product> products = new ArrayList<>();
         while ((line = bufferedReader.readLine()) != null) {
+            System.out.println(line);
             if(!skipLine) {
                 String[] r = line.split(",",11);
                 Product product = new Product();

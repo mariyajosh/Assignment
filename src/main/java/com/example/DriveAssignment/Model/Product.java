@@ -154,4 +154,18 @@ public class Product {
                 ", supplier='" + supplier + '\'' +
                 '}';
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        if(!(obj instanceof Product)){
+            return false;
+        }
+        Product product = (Product) obj;
+        return this.id == product.id && this.batch.equalsIgnoreCase(product.batch) && this.code.equalsIgnoreCase(product.code)
+                && this.company.equalsIgnoreCase(product.company) &&this.name.equalsIgnoreCase(product.name) && this.supplier.equalsIgnoreCase(product.supplier)
+                && this.date == product.date && Integer.valueOf(this.stock).equals(Integer.valueOf(product.stock)) &&
+                Integer.valueOf(this.deal).equals(Integer.valueOf(product.deal)) && Integer.valueOf(this.free).equals(Integer.valueOf(product.free))
+                && Double.valueOf(this.mrp).equals(Double.valueOf(product.mrp)) && Double.valueOf(this.rate).equals(Double.valueOf(product.rate));
+
+    }
 }
