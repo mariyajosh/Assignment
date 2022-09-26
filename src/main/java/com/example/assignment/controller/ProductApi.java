@@ -21,6 +21,12 @@ public class ProductApi {
 
     private Logger log = LoggerFactory.getLogger(this.getClass());
 
+    /**
+     * This API save the uploaded file data in data base
+     * @param document Accept MultiPartFile(Csv formatted)
+     * @return message includes total number of products added into database
+     */
+
     @RequestMapping(path = "/products", method = POST, consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
     String addProducts(@RequestParam("file") MultipartFile document) {
         log.info("Request received for adding data");
@@ -28,6 +34,17 @@ public class ProductApi {
         return numberOfProductsAdded + " " + "Products added Successfully";
     }
 
+    /**
+     * API to fetch the product based on applied filters.
+     * @param supplier filter based on given supplier name
+     * @param productName filter based on given supplier name
+     * @param expired  false returns unexpired products
+     * @param stock    true returns product who has stock
+     * @param page
+     * @param size
+     * @return List of Product and Total number of products available for applied filter
+
+     */
     @RequestMapping(path = "/products", method = GET)
     ProductResponse getProducts(
             @RequestParam(required = false) String supplier,
