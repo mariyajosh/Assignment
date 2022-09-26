@@ -6,7 +6,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.Page;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -28,7 +27,7 @@ public class ProductRepositoryIntegrationTest {
     @Test
     public void getProducts(){
         productList.add(product);
-        Page<Product> page =  productRepository.getProducts(null, null, null, null);
+        Page<Product> page =  productRepository.getProducts(null, null, null, null, null);
         Assertions.assertEquals(page.getTotalElements(), 1);
         Assertions.assertEquals(page.getContent(), productList);
     }

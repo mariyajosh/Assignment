@@ -2,6 +2,7 @@ package com.example.assignment.service;
 
 
 import com.example.assignment.model.Product;
+import com.example.assignment.model.QueryParams;
 import com.example.assignment.repository.ProductRepository;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -12,6 +13,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.web.multipart.MultipartFile;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -28,6 +30,7 @@ public class ProductsServiceTest {
 
     Product product = new Product(0, "RENT", "RENT", "", 24, 0, 0, 0.0, 0.0, null, "RENT", "SARADA PHARMACY");
     List<Product> productList = new ArrayList<>();
+
     @Test
     public void ShouldParseGivenDataAndCallSaveAllMethodToSaveData() {
 
@@ -38,19 +41,21 @@ public class ProductsServiceTest {
     }
 
     @Test
-    public void ShouldCallRepositoryMethodToGetDataWithParams(){
+    public void ShouldCallRepositoryMethodToGetDataWithParams() {
+        QueryParams queryParams = QueryParams.WrapParams("Atlassian", "software", true, null, null);
         Page<Product> page = new PageImpl<>(productList);
-        Mockito.when(productRepository.getProducts("Atlassian", "software", true, null)).thenReturn(page);
-        productsService.getProducts("Atlassian", "software", true, null);
-        Mockito.verify(productRepository, Mockito.times(1)).getProducts("Atlassian", "software", true, null);
+        Mockito.when(productRepository.getProducts("Atlassian", "software", true, null, null)).thenReturn(page);
+        productsService.getProducts(queryParams);
+        Mockito.verify(productRepository, Mockito.times(1)).getProducts("Atlassian", "software", true, null, null);
     }
 
     @Test
-    public void ShouldCallRepositoryMethodToGetDataWithEmptyParams(){
+    public void ShouldCallRepositoryMethodToGetDataWithEmptyParams() {
+        QueryParams queryParams = QueryParams.WrapParams(null, null, null, null, null);
         Page<Product> page = new PageImpl<>(productList);
-        Mockito.when(productRepository.getProducts(null, null, null, null)).thenReturn(page);
-        productsService.getProducts(null, null, null, null);
-        Mockito.verify(productRepository, Mockito.times(1)).getProducts(null, null, null, null);
+        Mockito.when(productRepository.getProducts(null, null, null, null, null)).thenReturn(page);
+        productsService.getProducts(queryParams);
+        Mockito.verify(productRepository, Mockito.times(1)).getProducts(null, null, null, null, null);
     }
 
     private MultipartFile convertCsvToMultipartFile() {
@@ -58,8 +63,8 @@ public class ProductsServiceTest {
             MultipartFile multipartFile = new MockMultipartFile("testData.csv", new FileInputStream(new File("src/test/resources/testData.csv")));
             return multipartFile;
         } catch (IOException ioException) {
-               System.out.println(ioException.getLocalizedMessage());
+            System.out.println(ioException.getLocalizedMessage());
         }
-       return null;
+        return null;
     }
 }

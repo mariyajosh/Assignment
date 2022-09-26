@@ -2,6 +2,7 @@ package com.example.assignment.service;
 
 import com.example.assignment.model.Product;
 import com.example.assignment.model.ProductResponse;
+import com.example.assignment.model.QueryParams;
 import com.example.assignment.repository.ProductRepository;
 import com.example.assignment.util.Utility;
 import org.slf4j.Logger;
@@ -11,6 +12,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -28,27 +30,34 @@ public class ProductsService {
 
     private Logger log = LoggerFactory.getLogger(this.getClass());
 
-    public long addProducts(MultipartFile document){
+    public long addProducts(MultipartFile document) {
         try {
             log.info("reading file data through streams");
             InputStream inputStream = document.getInputStream();
             BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
             List<Product> products = mapToProducts(bufferedReader);
-            Iterable<Product> result =  productRepository.saveAll(products);
+            Iterable<Product> result = productRepository.saveAll(products);
             return StreamSupport.stream(result.spliterator(), false).count();
         } catch (ParseException e) {
             log.error(e.getLocalizedMessage());
         } catch (IOException e) {
             log.error(e.getLocalizedMessage());
-        } catch(Exception e){
+        } catch (Exception e) {
             log.error(e.getLocalizedMessage());
         }
         return 0;
     }
-    public ProductResponse getProducts(String supplier, String productName, Boolean expired, PageRequest pageRequest){
+
+    public ProductResponse getProducts(QueryParams params) {
         log.info("Invoking repository method");
-     Page<Product> products = productRepository.getProducts(supplier, productName, expired, pageRequest);
-     return new ProductResponse(products.getContent(), (int)products.getTotalElements());
+        Page<Product> products = productRepository.getProducts(
+                params.getSupplier(),
+                params.getProductName(),
+                params.getExpired(),
+                params.getStock(),
+                params.getPageRequest()
+        );
+        return new ProductResponse(products.getContent(), (int) products.getTotalElements());
     }
 
     private List<Product> mapToProducts(BufferedReader bufferedReader) throws IOException, ParseException {
@@ -57,8 +66,8 @@ public class ProductsService {
         String line;
         List<Product> products = new ArrayList<>();
         while ((line = bufferedReader.readLine()) != null) {
-            if(!skipLine) {
-                String[] productDetails = line.split(",",11);
+            if (!skipLine) {
+                String[] productDetails = line.split(",", 11);
                 Product product = new Product();
                 product.setCode(productDetails[0]);
                 product.setName(productDetails[1]);
